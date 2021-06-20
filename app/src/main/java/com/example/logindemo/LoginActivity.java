@@ -138,15 +138,21 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUIChanges(JSONObject response) {
         activityLoginBinding.btnFBLogin.setText("Logout");
         activityLoginBinding.group.setVisibility(View.VISIBLE);
+
+        activityLoginBinding.tvUserName.setText(extractValueFromNULL(response, "name"));
+        activityLoginBinding.tvEmail.setText(extractValueFromNULL(response, "email"));
+        activityLoginBinding.tvGender.setText(extractValueFromNULL(response, "gender"));
+        activityLoginBinding.tvDOB.setText(extractValueFromNULL(response, "birthday"));
+        loadProfileImage(extractValueFromNULL(response, "id"));
+    }
+
+    private String extractValueFromNULL(JSONObject response, String name) {
         try {
-            activityLoginBinding.tvUserName.setText(response.getString("name"));
-            activityLoginBinding.tvEmail.setText(response.getString("email"));
-            activityLoginBinding.tvGender.setText(response.getString("gender"));
-            activityLoginBinding.tvDOB.setText(response.getString("birthday"));
-            loadProfileImage(response.getString("id"));
+            return response.has(name) ? response.getString(name) : "";
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
     //For Image: https://graph.facebook.com/{id}/picture?width=9999
